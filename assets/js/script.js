@@ -19,7 +19,10 @@ $(document).ready(function () {
     let campaignDiv = "<div>";
 
     json.forEach((element) => {
-      campaignDiv += `<p>${element.name}\tVotes: ${element.vote_count}</p>`;
+      campaignDiv += `
+        <a href='./pages/campaign.html?campaign_id=${element.campaign_id}'>
+          <p>${element.name}\tVotes: ${element.vote_count}</p>
+        </a>`;
     });
     campaignDiv += "</div>";
 
