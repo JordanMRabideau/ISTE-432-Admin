@@ -36,4 +36,15 @@ $(document).ready(function () {
       $("#campaign-div").append(dates);
     }
   );
+
+  xhr(
+    "get",
+    `http://localhost:3000/api/campaign/results/${campaignId}`,
+    {}
+  ).done(function (json) {
+    json.forEach((element) => {
+      const question = `<div>
+        `;
+    });
+  });
 });
