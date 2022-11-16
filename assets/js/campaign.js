@@ -13,6 +13,51 @@ function xhr(getPost, url, data) {
   });
 }
 
+function formatQuestions(questions) {
+  const sorted = questions.sort((a, b) => {
+    if (a.question_position === b.question_position) {
+      if (a.choice_position > b.choice_position) {
+        return -1;
+      }
+
+      return 1;
+    }
+    if (a.question_position > b.question_position) {
+      return -1;
+    }
+
+    return 1;
+  });
+
+  let formatted = [];
+
+  sorted.forEach((item) => {
+    let question = formatted.find((q) => q.question_id === item.question_id);
+    const choice = {
+      response_id: item.response_id,
+      name: item.name,
+      title: item.title,
+      bio: item.bio,
+      image_filepath: item.image_filepath,
+      vote_count: item.vote_count,
+    };
+    // If the question isn't already in the formatted array, create the question and add it
+    if (!question) {
+      formatted.push({
+        question_id: item.question_id,
+        question: item.question,
+        maximum_selections: item.maximum_selections,
+        choices: [],
+      });
+      question = formatted.find((q) => q.question_id === item.question_id);
+    }
+
+    question.choices.push(choice);
+  });
+
+  return formatted;
+}
+
 $(document).ready(function () {
   const query = window.location.search;
   const params = new URLSearchParams(query);
@@ -42,9 +87,22 @@ $(document).ready(function () {
     `http://localhost:3000/api/campaign/results/${campaignId}`,
     {}
   ).done(function (json) {
-    json.forEach((element) => {
-      const question = `<div>
-        `;
+    const formattedQuestions = formatQuestions(json);
+    console.log(formattedQuestions);
+
+    // Create the initial divs for each position/question
+    formattedQuestions.forEach((element) => {
+      let question = `
+        <h3>${element.question}</h3>
+        <ul id='question-${element.question_id}'>`;
+
+      // Add each candidate
+      element.choices.forEach((choice) => {
+        question += `<p>${choice.name} - ${choice.title}: ${choice.vote_count}</p>`;
+      });
+      question += "</ul>";
+
+      $("#results-div").append(question);
     });
   });
 });
