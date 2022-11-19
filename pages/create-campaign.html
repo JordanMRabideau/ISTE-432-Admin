@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campaign Admin Portal</title>
+    <!-- Jquery UI CSS  -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.min.css"
+      integrity="sha512-+0Vhbu8sRUlg+R/NKgTv7ahM+szPDF10G6J5PcHb1tOrAaquZIUiKUV3TH16mi6fuH4NjvHqlok6ppBhR6Nxuw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="../assets/style/create-campaign.css" />
+  </head>
+  <body>
+    <div>
+      <h1>Create a new Campaign</h1>
+      <div>
+        <label for="society-name">Society:</label>
+        <select name="society-name" id="society-select"></select>
+
+        <label for="campaign-name">Campaign Name:</label>
+        <input id="campaign-name" name="campaign-name" type="text" />
+
+        <div>
+          <label for="start">Start Date</label>
+          <input id="start-time" type="date" name="start" />
+
+          <label for="end">End Date</label>
+          <input id="end-time" type="date" name="end" />
+        </div>
+
+        <div id="questions"></div>
+
+        <button id="add-question">Add Question</button>
+        <button id="create">Create</button>
+      </div>
+
+      <div id="questions"></div>
+    </div>
+
+    <!-- Jquery CDN -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Jquery UI CDN -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+      integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="../assets/js/create-campaign.js"></script>
+  </body>
+</html>

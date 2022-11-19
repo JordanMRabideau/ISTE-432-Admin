@@ -15,7 +15,7 @@ function xhr(getPost, url, data) {
 
 $(document).ready(function () {
   // Test the endpoint
-  xhr("get", "http://localhost:3000/api/campaigns/Y", {}).done(function (json) {
+  xhr("get", "http://localhost:3000/api/campaigns", {}).done(function (json) {
     let campaignDiv = "<div>";
 
     json.forEach((element) => {

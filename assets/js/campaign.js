@@ -15,20 +15,20 @@ function xhr(getPost, url, data) {
 
 function formatQuestions(questions) {
   const sorted = questions.sort((a, b) => {
-    if (a.question_position === b.question_position) {
-      if (a.choice_position > b.choice_position) {
-        return -1;
+    if (a.question_placement === b.question_placement) {
+      if (a.choice_placement > b.choice_placement) {
+        return 1;
       }
 
       return 1;
     }
-    if (a.question_position > b.question_position) {
-      return -1;
+    if (a.question_placement > b.question_placement) {
+      return 1;
     }
 
-    return 1;
+    return -1;
   });
-
+  console.log(sorted);
   let formatted = [];
 
   sorted.forEach((item) => {
@@ -87,6 +87,7 @@ $(document).ready(function () {
     `http://localhost:3000/api/campaign/results/${campaignId}`,
     {}
   ).done(function (json) {
+    console.log(json);
     const formattedQuestions = formatQuestions(json);
     console.log(formattedQuestions);
 
