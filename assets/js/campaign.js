@@ -55,6 +55,8 @@ function formatQuestions(questions) {
     question.choices.push(choice);
   });
 
+  console.log(formatted)
+
   return formatted;
 }
 
@@ -87,9 +89,7 @@ $(document).ready(function () {
     `http://localhost:3000/api/campaign/results/${campaignId}`,
     {}
   ).done(function (json) {
-    console.log(json);
     const formattedQuestions = formatQuestions(json);
-    console.log(formattedQuestions);
 
     // Create the initial divs for each position/question
     formattedQuestions.forEach((element) => {

@@ -13,18 +13,111 @@ function xhr(getPost, url, data) {
   });
 }
 
-// Need to make a method that adds another possible position when a choice/question is added...
+function getInputs() {
+  const inputs = $("#questions :input:not(:button)")
+  const qRegex = new RegExp("(question-\\d*)")
+  const cRegex = new RegExp("(choice-\\d*)")
+
+  // Get all of the input into object form for easier manipulation
+  const inputObjects = $.makeArray(inputs).map((input) => {
+    const question = input.id.match(qRegex)
+    const choice = input.id.match(cRegex)
+    const type = $(input).data().type
+    const obj = {
+      questionNum: Number(question[0].replace("question-", "")),
+      value: input.value,
+      type
+    }
+
+    if (choice != null) {
+      obj.choiceNum = Number(choice[0].replace("choice-", ""))
+    }
+    
+    return obj
+  })
+
+  let formattedQuestions = []
+
+  inputObjects.forEach((obj) => {
+    // Attempt to locate the question in the formatted list
+    let existingQuestion = formattedQuestions.find((question) => question.questionNum === obj.questionNum)
+
+    // If the question doesnt already exist, make it
+    if (!existingQuestion) {
+      const newPosition = formattedQuestions.push({
+        questionNum: obj.questionNum,
+        title: "",
+        limit: -1,
+        choices: []
+      })
+
+      existingQuestion = formattedQuestions.find((question) => question.questionNum === obj.questionNum)
+
+      // Set the position value to the position of the new object in the array (1 indexed)
+      existingQuestion.position = newPosition
+    }
+
+    // If the object is a choice, add that choice to the question
+    if (obj.hasOwnProperty('choiceNum')) {
+      let existingChoice = existingQuestion.choices.find((choice) => choice.choiceNum === obj.choiceNum)
+
+      if (!existingChoice) {
+        const newChoicePosition = existingQuestion.choices.push({
+          choiceNum: obj.choiceNum,
+          name: "",
+          image: "",
+          info: "",
+        })
+
+        existingChoice = existingQuestion.choices.find((choice) => choice.choiceNum === obj.choiceNum)
+        existingChoice.position = newChoicePosition
+      }
+
+      switch (obj.type) {
+        case 'name':
+          if (obj.value === '') {
+            return "error"
+          }
+          existingChoice.name = obj.value
+          break
+        case 'image':
+          existingChoice.image = obj.value
+          break
+        case 'info':
+          existingChoice.info = obj.value
+          break
+        default:
+          break
+      }
+    }
+
+    else {
+      switch (obj.type) {
+        case 'title':
+          if (obj.value === '') {
+            return "error"
+          }
+          existingQuestion.title = obj.value
+          break
+        case 'limit':
+          existingQuestion.limit = Number(obj.value)
+      }
+    }
+  })
+
+  return formattedQuestions
+}
 
 $(document).ready(function () {
   let questions = [];
 
+  // initialize the questions as a sortable div for drag/drop
   $("#questions").sortable();
-  $(".choices").sortable();
 
   // Get the initial list of societies
   xhr("get", "http://localhost:3000/api/societies", {}).done(function (json) {
     json.forEach((society) => {
-      const choice = `<choice value='${society.society_id}'>${society.name}</choice>`;
+      const choice = `<option value='${society.society_id}'>${society.name}</option>`;
 
       $("#society-select").append(choice);
     });
@@ -38,87 +131,77 @@ $(document).ready(function () {
     const newQ = `
       <div class="question" id='question-${qNumber}'>
         <label for="question-${qNumber}-title">Title<span class="required">*</span></label>
-        <input name="question-${qNumber}-title" id="question-${qNumber}-title" type="text" />
+        <input required name="question-${qNumber}-title" data-type="title" id="question-${qNumber}-title" type="text" />
 
-        <label for="question-${qNumber}-choice-limit">Maximum Selections</label>
-        <select name="question-${qNumber}-choice-limit" id="question-${qNumber}-choice-limit">
+        <label for="question-${qNumber}-limit">Maximum Selections</label>
+        <select name="question-${qNumber}-limit" data-type="limit" id="question-${qNumber}-limit">
           <option value="1">1</choice>
         </select>
 
         <div class="choices" id="question-${qNumber}-choices">
           <div class="choice">
-            <label for="question-${qNumber}-choice-1">choice<span class="required">*</span></label>
-            <input name="question-${qNumber}-choice-1" id="question-${qNumber}-choice-1" type="text" />
+            <label for="question-${qNumber}-choice-1-name">choice<span class="required">*</span></label>
+            <input required name="question-${qNumber}-choice-1-name" data-type="name" id="question-${qNumber}-choice-1-name" type="text" />
 
             <label for="question-${qNumber}-choice-1-image">Image</label>
-            <input name="question-${qNumber}-choice-1-image" id="question-${qNumber}-choice-1-image" type="file" />
+            <input name="question-${qNumber}-choice-1-image" data-type="image" id="question-${qNumber}-choice-1-image" type="file" />
 
             <label for="question-${qNumber}-choice-1-info">choice Information</label>
-            <textarea name="question-${qNumber}-choice-1-info" id="question-${qNumber}-choice-1"></textarea>
+            <textarea name="question-${qNumber}-choice-1-info" data-type="info" id="question-${qNumber}-choice-1-info"></textarea>
           </div>
         </div>
 
-        <button class="add-choice" data-question="${qNumber}">Add choice</button>
+        <button type="button" class="add-choice" data-question="${qNumber}">Add choice</button>
       </div>`;
 
     $("#questions").append(newQ);
+
+    // initialize the choices as a sortable div for drag/drop
+    $(".choices").sortable();
   });
 
   // Adds a new choice to the current question
   $("#questions").on("click", ".add-choice", function () {
     const questionId = $(this).attr("data-question");
-    const numchoices = $(`#question-${questionId}-choice-limit choice`).length;
-    console.log(numchoices);
+    const numchoices = $(`#question-${questionId}-limit option`).length;
     const choiceId = numchoices + 1;
     let newchoice = `
       <div class="choice">
         <label for="question-${questionId}-choice-${choiceId}">choice<span class="required">*</span></label>
-        <input name="question-${questionId}-choice-${choiceId}" id="question-${questionId}-choice-${choiceId}" type="text" />
+        <input required name="question-${questionId}-choice-${choiceId}" data-type="name" id="question-${questionId}-choice-${choiceId}" type="text" />
 
         <label for="question-${questionId}-choice-${choiceId}-image">Image</label>
-        <input name="question-${questionId}-choice-${choiceId}-image" id="question-${questionId}-choice-${choiceId}-image" type="file" />
+        <input name="question-${questionId}-choice-${choiceId}-image" data-type="image" id="question-${questionId}-choice-${choiceId}-image" type="file" />
 
         <label for="question-${questionId}-choice-${choiceId}-info">choice Information</label>
-        <textarea name="question-${questionId}-choice-${choiceId}-info" id="question-${questionId}-choice-${choiceId}"></textarea>
-
-        <label for="question-${questionId}-choice-${choiceId}-position">Choice Position</label>
-        <select name="question-${questionId}-choice-${choiceId}-position" id="question-${questionId}-choice-${choiceId}-position">
-          <option value="1">1</choice>
+        <textarea name="question-${questionId}-choice-${choiceId}-info" data-type="info" id="question-${questionId}-choice-${choiceId}"></textarea>
+      </div>
     `;
 
-    // add an option for all possible positions
-    for (let i = 0; i < numchoices; i++) {
-      newchoice += `<option value="${i + 1}">${i + 1}</option>`;
-    }
-
-    // Close off the choice div
-    newchoice += `</select>
-    </div>`;
-
     // Add the choice to the question
-    // $(newchoice).insertBefore(`#question-${questionId} > div:last`);
     $(`#question-${questionId}-choices`).append(newchoice);
 
     // Add another choice to max selections for that question
-    $(`#question-${questionId}-choice-limit`).append(
-      `<choice value="${numchoices + 1}">${numchoices + 1}</choice>`
+    $(`#question-${questionId}-limit`).append(
+      `<option value="${numchoices + 1}">${numchoices + 1}</option>`
     );
   });
 
-  // Create the new campaign when you hit the button
-  $("#create").click(function () {
+  $("#questions").submit(function(e) {
+    e.preventDefault()
+
     const data = {
-      society_id: $("#society-select").val(),
+      society_id: Number($("#society-select").val()),
       name: $("#campaign-name").val(),
       start_time: $("#start-time").val(),
       end_time: $("#end-time").val(),
+      questions: getInputs()
     };
 
-    console.log(data);
-    xhr("post", "http://localhost:3000/api/campaign", data).done(function (
+    xhr("post", "http://localhost:3000/api/campaign/generate", data).done(function (
       response
     ) {
       console.log(response);
     });
-  });
+  })
 });
