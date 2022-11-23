@@ -18,10 +18,12 @@ $(document).ready(function () {
   xhr("get", "http://localhost:3000/api/campaigns", {}).done(function (json) {
     let campaignDiv = "<div>";
 
+    console.log(json);
+
     json.forEach((element) => {
       campaignDiv += `
         <a href='./pages/campaign.html?campaign_id=${element.campaign_id}'>
-          <p>${element.name}\tVotes: ${element.vote_count}</p>
+          <p>${element.society_name} - ${element.name}\tVotes: ${element.vote_count}</p>
         </a>`;
     });
     campaignDiv += "</div>";
