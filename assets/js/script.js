@@ -15,10 +15,24 @@ function xhr(getPost, url, data) {
 
 $(document).ready(function () {
   // Test the endpoint
+  xhr("get", "http://localhost:3000/api/societies", {}).done(function (json) {
+    let societyDiv = "<div>";
+
+    json.forEach((element) => {
+      societyDiv += `
+        <a href='./pages/society.html?society_id=${element.society_id}'>
+          <p>${element.name}</p>
+        </a>
+      `;
+    });
+
+    societyDiv += "</div>";
+
+    $("#society-list").append(societyDiv);
+  });
+
   xhr("get", "http://localhost:3000/api/campaigns", {}).done(function (json) {
     let campaignDiv = "<div>";
-
-    console.log(json);
 
     json.forEach((element) => {
       campaignDiv += `
