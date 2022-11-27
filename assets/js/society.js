@@ -23,8 +23,29 @@ $(document).ready(function () {
       const society = json[0];
 
       const name = `<h1>${society.name}</h1>`;
+      const info = `<p>Active members: ${society.member_count}</p>`;
 
       $("#society-div").append(name);
+      $("#society-div").append(info);
     }
   );
+
+  xhr(
+    "get",
+    `http://localhost:3000/api/societies/campaigns/${societyId}`,
+    {}
+  ).done(function (json) {
+    json.forEach((element) => {
+      let campaignDiv = `
+        <a href='./pages/campaign.html?campaign_id=${element.campaign_id}'>
+            <p>${element.name}\tVotes: ${element.vote_count}</p>
+        </a>
+        <a class="button-link" href='../pages/edit-campaign.html?campaign_id=${element.campaign_id}'>
+            Edit campaign        
+        </a>
+        `;
+
+      $("#campaigns").append(campaignDiv);
+    });
+  });
 });

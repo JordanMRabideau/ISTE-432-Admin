@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campaign Admin Portal</title>
+  </head>
+  <body>
+    <div>
+      <label for="campaign-name">Campaign Name:</label>
+      <input id="campaign-name" name="campaign-name" type="text" />
+
+      <div>
+        <label for="start">Start Date</label>
+        <input id="start-time" type="date" name="start" />
+
+        <label for="end">End Date</label>
+        <input id="end-time" type="date" name="end" />
+      </div>
+
+      <div id="questions-container">
+        <form id="questions"></form>
+      </div>
+
+      <button id="add-question">Add Question</button>
+      <button type="submit" form="questions" id="create">Create</button>
+    </div>
+
+    <!-- Jquery CDN -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Jquery UI CDN -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+      integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="../assets/js/edit-campaign.js"></script>
+  </body>
+</html>
