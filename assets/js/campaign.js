@@ -69,18 +69,16 @@ $(document).ready(function () {
     function (json) {
       const campaign = json[0];
 
-      const title = `<h1>${campaign.name} - ${campaign.society_name}</h1>`;
+      const title = `<h2>${campaign.society_name}</h2>`;
+      const camp = `<h1>${campaign.name}</h1>`;
       const dates = `
-      <div>
         <h2>Campaign Dates:</h2>
-        <div>
-          <p>Start: ${campaign.start_time}</p>
-          <p>End: ${campaign.end_time}</p>  
-        </div>
-      </div`;
+          <p>Start Date: ${campaign.start_time.split("T")[0]}</p>
+          <p>End Date: ${campaign.end_time.split("T")[0]}</p>`;
 
       $("#campaign-div").append(title);
-      $("#campaign-div").append(dates);
+      $("#title-div").append(camp);
+      $("#date-div").append(dates);
     }
   );
 
@@ -94,14 +92,14 @@ $(document).ready(function () {
     // Create the initial divs for each position/question
     formattedQuestions.forEach((element) => {
       let question = `
-        <h3>${element.question}</h3>
+        <fieldset class="fieldset-auto-width"><legend>${element.question}</legend>
         <ul id='question-${element.question_id}'>`;
 
       // Add each candidate
       element.choices.forEach((choice) => {
-        question += `<p>${choice.name} - ${choice.title}: ${choice.vote_count}</p>`;
+        question += `<li>${choice.name} - ${choice.title} - Votes: ${choice.vote_count}</li>`;
       });
-      question += "</ul>";
+      question += "</ul></fieldset>";
 
       $("#results-div").append(question);
     });

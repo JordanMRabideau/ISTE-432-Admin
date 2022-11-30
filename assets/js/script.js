@@ -16,13 +16,13 @@ function xhr(getPost, url, data) {
 $(document).ready(function () {
   // Test the endpoint
   xhr("get", "http://localhost:3000/api/societies", {}).done(function (json) {
-    let societyDiv = "<div>";
+    let societyDiv = "<div><h2>Active Societies</h2>";
 
     json.forEach((element) => {
       societyDiv += `
-        <a href='./pages/society.html?society_id=${element.society_id}'>
-          <p>${element.name}</p>
-        </a>
+        <button><a href='./pages/society.html?society_id=${element.society_id}'>
+          ${element.name}
+        </a></button><br>
       `;
     });
 
@@ -32,13 +32,13 @@ $(document).ready(function () {
   });
 
   xhr("get", "http://localhost:3000/api/campaigns", {}).done(function (json) {
-    let campaignDiv = "<div>";
+    let campaignDiv = "<div><h2>Campaign List</h2>";
 
     json.forEach((element) => {
       campaignDiv += `
-        <a href='./pages/campaign.html?campaign_id=${element.campaign_id}'>
-          <p>${element.society_name} - ${element.name}\tVotes: ${element.vote_count}</p>
-        </a>`;
+        <button><a href='./pages/campaign.html?campaign_id=${element.campaign_id}'>
+          ${element.society_name} - ${element.name}\tVotes: ${element.vote_count}
+        </a></button><br>`;
     });
     campaignDiv += "</div>";
 
