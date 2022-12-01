@@ -130,28 +130,28 @@ $(document).ready(function () {
 
     const newQ = `
       <div class="question" id='question-${qNumber}'>
-        <label for="question-${qNumber}-title">Title<span class="required">*</span></label>
-        <input required name="question-${qNumber}-title" data-type="title" id="question-${qNumber}-title" type="text" />
+        <label for="question-${qNumber}-title"><span class="required">*</span>Title: </label>
+        <input required name="question-${qNumber}-title" data-type="title" id="question-${qNumber}-title" type="text" />&emsp;&emsp;
 
-        <label for="question-${qNumber}-limit">Maximum Selections</label>
+        <label for="question-${qNumber}-limit">Maximum Selections: </label>
         <select name="question-${qNumber}-limit" data-type="limit" id="question-${qNumber}-limit">
           <option value="1">1</choice>
         </select>
 
         <div class="choices" id="question-${qNumber}-choices">
           <div class="choice">
-            <label for="question-${qNumber}-choice-1-name">choice<span class="required">*</span></label>
-            <input required name="question-${qNumber}-choice-1-name" data-type="name" id="question-${qNumber}-choice-1-name" type="text" />
+            <label for="question-${qNumber}-choice-1-name"><span class="required">*</span>Choice: </label>
+            <input required name="question-${qNumber}-choice-1-name" data-type="name" id="question-${qNumber}-choice-1-name" type="text" />&emsp;&emsp;
 
-            <label for="question-${qNumber}-choice-1-image">Image</label>
-            <input name="question-${qNumber}-choice-1-image" data-type="image" id="question-${qNumber}-choice-1-image" type="file" />
+            <label for="question-${qNumber}-choice-1-image">Image: </label>
+            <input name="question-${qNumber}-choice-1-image" data-type="image" id="question-${qNumber}-choice-1-image" type="file" />&emsp;&emsp;
 
-            <label for="question-${qNumber}-choice-1-info">choice Information</label>
+            <label for="question-${qNumber}-choice-1-info">Choice Info/Bio: </label>
             <textarea name="question-${qNumber}-choice-1-info" data-type="info" id="question-${qNumber}-choice-1-info"></textarea>
           </div>
         </div>
 
-        <button type="button" class="add-choice" data-question="${qNumber}">Add choice</button>
+        <br><button type="button" class="add-choice" data-question="${qNumber}">Add Choice</button><br><br><br>
       </div>`;
 
     $("#questions").append(newQ);
@@ -167,13 +167,13 @@ $(document).ready(function () {
     const choiceId = numchoices + 1;
     let newchoice = `
       <div class="choice">
-        <label for="question-${questionId}-choice-${choiceId}">choice<span class="required">*</span></label>
-        <input required name="question-${questionId}-choice-${choiceId}" data-type="name" id="question-${questionId}-choice-${choiceId}" type="text" />
+        <label for="question-${questionId}-choice-${choiceId}"><span class="required">*</span>Choice: </label>
+        <input required name="question-${questionId}-choice-${choiceId}" data-type="name" id="question-${questionId}-choice-${choiceId}" type="text" />&emsp;&emsp;
 
-        <label for="question-${questionId}-choice-${choiceId}-image">Image</label>
-        <input name="question-${questionId}-choice-${choiceId}-image" data-type="image" id="question-${questionId}-choice-${choiceId}-image" type="file" />
+        <label for="question-${questionId}-choice-${choiceId}-image">Image: </label>
+        <input name="question-${questionId}-choice-${choiceId}-image" data-type="image" id="question-${questionId}-choice-${choiceId}-image" type="file" />&emsp;&emsp;
 
-        <label for="question-${questionId}-choice-${choiceId}-info">choice Information</label>
+        <label for="question-${questionId}-choice-${choiceId}-info">Choice Info/Bio: </label>
         <textarea name="question-${questionId}-choice-${choiceId}-info" data-type="info" id="question-${questionId}-choice-${choiceId}"></textarea>
       </div>
     `;
