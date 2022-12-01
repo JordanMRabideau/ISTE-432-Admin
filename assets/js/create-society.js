@@ -50,7 +50,6 @@ $(document).ready(function () {
   }
 
   $("#society").submit(function (e) {
-    console.log("HEYYYYYYY");
     e.preventDefault();
 
     const data = {

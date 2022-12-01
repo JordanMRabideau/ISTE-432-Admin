@@ -5,29 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../assets/css/style.css" />
-    <title>Campaign Admin Portal</title>
+    <title>Society Creation</title>
   </head>
   <body>
     <div>
-      <h1>Create a new Society</h1>
+      <h1>Create a new Society</h1><br><br>
       <div>
         <form id="society">
           <label for="society-name">Society Name:</label>
           <input type="text" name="society-name" id="society-name" required />
           <br />
-          <label for="auth1-name">Primary Authorization Name:</label>
-          <input type="text" name="auth1-name" id="auth1-name" required />
-          <br />
-
-          <label for="auth2-name">Secondary Authorization Name:</label>
-          <input type="text" name="auth2-name" id="auth2-name" required />
-          <br />
-
+          <div class="parent">
+            <div class="child">
+              <label for="auth1-name">Primary Authorization Name:</label>
+              <input type="text" name="auth1-name" id="auth1-name" required />
+            </div>
+            <div class="child">
+              <label for="auth2-name">Secondary Authorization Name:</label>
+              <input type="text" name="auth2-name" id="auth2-name" required />
+            </div>
+            <br />
+          </div>
           <label for="members">Add Members</label>
           <input type="file" name="members" id="members" accept=".csv" />
         </form>
 
-        <button type="submit" form="society" id="create">Create</button>
+        <br><br><button type="submit" form="society" id="create">Create</button>
       </div>
     </div>
 

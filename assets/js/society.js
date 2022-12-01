@@ -37,12 +37,19 @@ $(document).ready(function () {
   ).done(function (json) {
     json.forEach((element) => {
       let campaignDiv = `
-        <a href='./pages/campaign.html?campaign_id=${element.campaign_id}'>
-            <p>${element.name}\tVotes: ${element.vote_count}</p>
-        </a>
-        <a class="button-link" href='../pages/edit-campaign.html?campaign_id=${element.campaign_id}'>
-            Edit campaign        
-        </a>
+        <div class="parent notop">
+          <div class="child">
+            <h3>${element.name}\t| Votes: ${element.vote_count}</h3>
+          </div>
+          <div class="child">
+            <button><a href='./pages/campaign.html?campaign_id=${element.campaign_id}'>
+                View Campaign Results
+            </a></button>
+          </div>
+        </div>
+          <button><a class="button-link" href='../pages/edit-campaign.html?campaign_id=${element.campaign_id}'>
+              Edit campaign        
+          </a></button>
         `;
 
       $("#campaigns").append(campaignDiv);

@@ -5,19 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../assets/css/style.css" />
-    <title>Campaign Admin Portal</title>
+    <title>Campaign Modification</title>
   </head>
   <body>
     <div>
+      <h1>Modify Campaign</h1><br><br>
       <label for="campaign-name">Campaign Name:</label>
       <input id="campaign-name" name="campaign-name" type="text" />
 
-      <div>
-        <label for="start">Start Date</label>
-        <input id="start-time" type="date" name="start" />
-
-        <label for="end">End Date</label>
-        <input id="end-time" type="date" name="end" />
+      <div class="parent">
+        <div class="child">
+          <label for="start">Start Date</label>
+          <input id="start-time" type="date" name="start" />
+        </div>
+        <div class="child">
+          <label for="end">End Date</label>
+          <input id="end-time" type="date" name="end" />
+        </div>
       </div>
 
       <div id="questions-container">
