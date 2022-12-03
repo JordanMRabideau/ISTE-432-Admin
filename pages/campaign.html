@@ -16,11 +16,23 @@
     <div id="results-div" class="child">
       <h2>Current Results</h2>
     </div>
+    <form id="add-ballots">
+      <label for="ballots">Import paper ballots</label>
+      <input type="file" name="ballots" id="ballots" accept=".csv" />
+    </form>
     <!-- Jquery CDN -->
     <script
       src="https://code.jquery.com/jquery-3.6.0.min.js"
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
+    ></script>
+
+    <!-- Jquery-CSV CDN -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"
+      integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     ></script>
 
     <script src="../assets/js/campaign.js"></script>
