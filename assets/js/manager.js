@@ -20,7 +20,7 @@ $(document).ready(function () {
 
     json.forEach((element) => {
       societyDiv += `
-        <button><a href='./pages/society.html?society_id=${element.society_id}'>
+        <button><a href='./society.html?society_id=${element.society_id}'>
           ${element.name}
         </a></button><br>
       `;
@@ -38,7 +38,7 @@ $(document).ready(function () {
       console.log(element)
       campaignDiv += `
         <div class="campaign">
-          <button><a href='./pages/campaign.html?campaign_id=${element.campaign_id}'>
+          <button><a href='./campaign.html?campaign_id=${element.campaign_id}'>
             ${element.society_name} - ${element.name}\tVotes: ${element.vote_count}
           </a></button><br>`
       if (element.active === "Y") {

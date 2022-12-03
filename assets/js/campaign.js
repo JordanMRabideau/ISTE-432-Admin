@@ -41,7 +41,7 @@ function formatQuestions(questions) {
       vote_count: item.vote_count,
       choice_placement: item.choice_placement
     };
-    
+
     // If the question isn't already in the formatted array, create the question and add it
     if (!question) {
       formatted.push({
@@ -206,4 +206,46 @@ $(document).ready(function () {
       $("#results-div").append(question);
     });
   });
+
+  $("#ballot-sample").submit(function(e) {
+    e.preventDefault()
+
+    const start = $("#ballot-start").val()
+    const end = $("#ballot-end").val()
+    let route
+
+    console.log("hi")
+    if (end && (end < start)) {
+      return
+    }
+    console.log(campaignId)
+    if (end && (end >= start)) {
+      route = `http://localhost:3000/api/campaign/results/${campaignId}/${start}/${end}`
+    } else {
+      route = `http://localhost:3000/api/campaign/results/${campaignId}/${start}`
+    }
+
+    xhr("get", route, {}).done(function(response) {
+      $("#sample-results").empty()
+
+      const formattedSamples = formatQuestions(response)
+
+      formattedSamples.forEach((element) => {
+        let question = `
+          <fieldset class="fieldset-auto-width"><legend>${element.question}</legend>
+          <ul id='question-${element.question_id}'>`;
+  
+        // Add each candidate
+        element.choices.forEach((choice) => {
+          question += `<li>${choice.name} - Votes: ${choice.vote_count}</li>`;
+        });
+        question += "</ul></fieldset>";
+  
+        $("#sample-results").append(question);
+      });
+
+      $("#result-modal").modal()
+    })
+    // console.log(start, end)
+  })
 });

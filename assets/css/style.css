@@ -162,3 +162,7 @@ input:checked + .slider:before {
 label.switch {
   padding-bottom: unset;
 }
+
+#result-modal {
+  color: black;
+}
