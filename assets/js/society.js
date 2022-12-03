@@ -42,12 +42,12 @@ $(document).ready(function () {
             <h3>${element.name}\t| Votes: ${element.vote_count}</h3>
           </div>
           <div class="child">
-            <button><a href='./pages/campaign.html?campaign_id=${element.campaign_id}'>
+            <button><a href='./campaign.html?campaign_id=${element.campaign_id}'>
                 View Campaign Results
             </a></button>
           </div>
         </div>
-          <button><a class="button-link" href='../pages/edit-campaign.html?campaign_id=${element.campaign_id}'>
+          <button><a class="button-link" href='./edit-campaign.html?campaign_id=${element.campaign_id}'>
               Edit campaign        
           </a></button>
         `;
