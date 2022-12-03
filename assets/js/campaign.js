@@ -39,7 +39,7 @@ function formatQuestions(questions) {
       bio: item.bio,
       image_filepath: item.image_filepath,
       vote_count: item.vote_count,
-      choice_placement: item.choice_placement
+      choice_placement: item.choice_placement,
     };
 
     // If the question isn't already in the formatted array, create the question and add it
@@ -57,53 +57,52 @@ function formatQuestions(questions) {
     question.choices.push(choice);
   });
 
-  console.log(formatted)
+  console.log(formatted);
 
   return formatted;
 }
 
 function validatePaperBallot(formattedBallot, paper) {
-  const ballotInts = paper.map(i => parseInt(i))
-  const ballotId = ballotInts.shift()
-  const selections = []
-  let numFields = 0
+  const ballotInts = paper.map((i) => parseInt(i));
+  const ballotId = ballotInts.shift();
+  const selections = [];
+  let numFields = 0;
 
   // determine how many fields should be in the csv, throw out any non-compliant rows
-  formattedBallot.forEach(b => {
-    numFields += b.choices.length
-  })
+  formattedBallot.forEach((b) => {
+    numFields += b.choices.length;
+  });
 
   if (ballotInts.length != numFields) {
-    return []
+    return [];
   }
 
-  formattedBallot.forEach(b => {
-    const max = b.maximum_selections
+  formattedBallot.forEach((b) => {
+    const max = b.maximum_selections;
 
-    const question = ballotInts.splice(0, b.choices.length)
-    const checked = question.reduce((a, b) => a + b, 0)
+    const question = ballotInts.splice(0, b.choices.length);
+    const checked = question.reduce((a, b) => a + b, 0);
 
     if (checked <= max) {
-
-      let selectedResponses = []
+      let selectedResponses = [];
 
       question.forEach((q, index) => {
         if (q === 1) {
           selectedResponses.push({
             question_id: b.question_id,
             response_id: b.choices[index].response_id,
-            ballot_id: ballotId
-          })
+            ballot_id: ballotId,
+          });
         }
-      })
+      });
 
       if (selectedResponses.length > 0) {
-        selections.push(...selectedResponses)
+        selections.push(...selectedResponses);
       }
     }
-  })
+  });
 
-  return selections
+  return selections;
 }
 
 // Method that checks that the browser supports the HTML5 File API
@@ -114,8 +113,6 @@ function browserSupportFileUpload() {
   }
   return isCompatible;
 }
-
-
 
 $(document).ready(function () {
   const query = window.location.search;
@@ -148,36 +145,37 @@ $(document).ready(function () {
       let file = evt.target.files[0];
       let reader = new FileReader();
       reader.readAsText(file);
-  
-      const selected = []
-  
+
+      const selected = [];
+
       reader.onload = function (event) {
         let csvData = event.target.result;
         data = $.csv.toArrays(csvData);
         if (data.length > 0) {
-          data.forEach(i => {
-            const ballot = validatePaperBallot(questions, i)
+          data.forEach((i) => {
+            const ballot = validatePaperBallot(questions, i);
             if (ballot.length > 0) {
-              selected.push(...ballot)
+              selected.push(...ballot);
             }
-          })
-  
+          });
+
           const body = {
             campaign_id: campaignId,
-            selections: selected
-          }
-  
-          xhr("post", `http://localhost:3000/api/ballot/import`, body).done(function(response) {
-            if (confirm(response.message)) {
-              window.location.reload()
+            selections: selected,
+          };
+
+          xhr("post", `http://localhost:3000/api/ballot/import`, body).done(
+            function (response) {
+              if (confirm(response.message)) {
+                window.location.reload();
+              }
             }
-          })  
+          );
         }
       };
       reader.onerror = function () {
         alert("Unable to read " + file.fileName);
       };
-  
     }
   }
 
@@ -189,7 +187,13 @@ $(document).ready(function () {
   ).done(function (json) {
     const formattedQuestions = formatQuestions(json);
 
-    document.getElementById("ballots").addEventListener("change", (event) => loadBallots(event, formattedQuestions), false)
+    document
+      .getElementById("ballots")
+      .addEventListener(
+        "change",
+        (event) => loadBallots(event, formattedQuestions),
+        false
+      );
 
     // Create the initial divs for each position/question
     formattedQuestions.forEach((element) => {
@@ -207,45 +211,45 @@ $(document).ready(function () {
     });
   });
 
-  $("#ballot-sample").submit(function(e) {
-    e.preventDefault()
+  $("#ballot-sample").submit(function (e) {
+    e.preventDefault();
 
-    const start = $("#ballot-start").val()
-    const end = $("#ballot-end").val()
-    let route
+    const start = $("#ballot-start").val();
+    const end = $("#ballot-end").val();
+    let route;
 
-    console.log("hi")
-    if (end && (end < start)) {
-      return
+    console.log("hi");
+    if (end && end < start) {
+      return;
     }
-    console.log(campaignId)
-    if (end && (end >= start)) {
-      route = `http://localhost:3000/api/campaign/results/${campaignId}/${start}/${end}`
+    console.log(campaignId);
+    if (end && end >= start) {
+      route = `http://localhost:3000/api/campaign/results/${campaignId}/${start}/${end}`;
     } else {
-      route = `http://localhost:3000/api/campaign/results/${campaignId}/${start}`
+      route = `http://localhost:3000/api/campaign/results/${campaignId}/${start}`;
     }
 
-    xhr("get", route, {}).done(function(response) {
-      $("#sample-results").empty()
+    xhr("get", route, {}).done(function (response) {
+      $("#sample-results").empty();
 
-      const formattedSamples = formatQuestions(response)
+      const formattedSamples = formatQuestions(response);
 
       formattedSamples.forEach((element) => {
         let question = `
           <fieldset class="fieldset-auto-width"><legend>${element.question}</legend>
           <ul id='question-${element.question_id}'>`;
-  
+
         // Add each candidate
         element.choices.forEach((choice) => {
           question += `<li>${choice.name} - Votes: ${choice.vote_count}</li>`;
         });
         question += "</ul></fieldset>";
-  
+
         $("#sample-results").append(question);
       });
 
-      $("#result-modal").modal()
-    })
+      $("#result-modal").modal();
+    });
     // console.log(start, end)
-  })
+  });
 });
