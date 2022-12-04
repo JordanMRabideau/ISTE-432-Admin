@@ -15,6 +15,16 @@ function xhr(getPost, url, data) {
   });
 }
 
+$("#campaigns").on("click", "#edit-link", function(e) {
+  e.preventDefault()
+
+  if ($("#edit-link").data().active === "N") {
+    window.location.href = `../pages/edit-campaign.html?campaign_id=${$("#edit-link").data().campaign}`
+  } else {
+    alert("This campaign is currently active.")
+  }
+})
+
 $(document).ready(function () {
   const query = window.location.search;
   const params = new URLSearchParams(query);
@@ -33,25 +43,28 @@ $(document).ready(function () {
     }
   );
 
-  // Get society's campaigns with vote count
-  xhr("get", `http://localhost:3000/api/societies/campaigns/${societyId}`, {}).done
-    (function (json) {
-      json.forEach((element) => {
-        let campaignDiv = `
-          <div class="parent notop">
-            <div class="child">
-              <h3>${element.name}\t| Votes: ${element.vote_count}</h3>
-            </div>
-            <div class="child">
-              <button><a href='./campaign.html?campaign_id=${element.campaign_id}'>
-                  View Campaign Results
-              </a></button>
-            </div>
+  xhr(
+    "get",
+    `http://localhost:3000/api/societies/campaigns/${societyId}`,
+    {}
+  ).done(function (json) {
+    console.log(json)
+    json.forEach((element) => {
+      let campaignDiv = `
+        <div class="parent notop">
+          <div class="child">
+            <h3>${element.name}\t| Votes: ${element.vote_count}</h3>
           </div>
-            <button><a class="button-link" href='./edit-campaign.html?campaign_id=${element.campaign_id}'>
-                Edit campaign        
+          <div class="child">
+            <button><a href='./campaign.html?campaign_id=${element.campaign_id}'>
+                View Campaign Results
             </a></button>
-          `;
+          </div>
+        </div>
+          <button data-active="${element.active}" data-campaign='${element.campaign_id}' id="edit-link"><a class="button-link" href='..edit-campaign.html?campaign_id=${element.campaign_id}'>
+              Edit campaign        
+          </a></button>
+        `;
 
       $("#campaigns").append(campaignDiv);
     });
