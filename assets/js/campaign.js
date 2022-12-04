@@ -60,8 +60,6 @@ function formatQuestions(questions) {
     question.choices.push(choice);
   });
 
-  console.log(formatted);
-
   return formatted;
 }
 
@@ -140,7 +138,7 @@ $(document).ready(function () {
       $("#date-div").append(dates);
     }
   );
-  
+
   // Imports paper ballots, reads, validates, and submits them to API
   function loadBallots(evt, questions) {
     if (!browserSupportFileUpload()) {
@@ -231,7 +229,7 @@ $(document).ready(function () {
     } else {
       route = `http://localhost:3000/api/campaign/results/${campaignId}/${start}`;
     }
-    
+
     // Get results sample
     xhr("get", route, {}).done(function (response) {
       $("#sample-results").empty();
@@ -254,6 +252,5 @@ $(document).ready(function () {
 
       $("#result-modal").modal();
     });
-    // console.log(start, end)
   });
 });

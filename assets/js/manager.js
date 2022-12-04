@@ -38,26 +38,25 @@ $(document).ready(function () {
     let campaignDiv = "<div><h2>Campaign List</h2>";
 
     json.forEach((element) => {
-      console.log(element)
       campaignDiv += `
         <div class="campaign">
           <button><a href='./campaign.html?campaign_id=${element.campaign_id}'>
             ${element.society_name} - ${element.name}\tVotes: ${element.vote_count}
-          </a></button><br>`
+          </a></button><br>`;
       if (element.active === "Y") {
         campaignDiv += `
           <label class="switch">
             <input checked type="checkbox" data-campaign="${element.campaign_id}">
             <span class="slider"></span>
           </label>
-        </div>`
+        </div>`;
       } else {
         campaignDiv += `
           <label class="switch">
             <input type="checkbox" data-campaign="${element.campaign_id}">
             <span class="slider"></span>
           </label>
-        </div>`
+        </div>`;
       }
     });
     campaignDiv += "</div>";
@@ -66,15 +65,15 @@ $(document).ready(function () {
   });
 
   // Add listener to toggle
-  $("#campaign-list").on("click", "input", function() {
-    const enable = $(this).is(":checked")
+  $("#campaign-list").on("click", "input", function () {
+    const enable = $(this).is(":checked");
     let data = {
       campaign_id: $(this).data().campaign,
-      enable: enable
-    }
+      enable: enable,
+    };
 
-    xhr("put", "http://localhost:3000/api/activate", data).done(function(response) {
-      console.log(response)
-    })
-  })
+    xhr("put", "http://localhost:3000/api/activate", data).done(function (
+      response
+    ) {});
+  });
 });

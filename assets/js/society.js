@@ -15,15 +15,17 @@ function xhr(getPost, url, data) {
   });
 }
 
-$("#campaigns").on("click", "#edit-link", function(e) {
-  e.preventDefault()
+$("#campaigns").on("click", ".edit-link", function (e) {
+  e.preventDefault();
 
-  if ($("#edit-link").data().active === "N") {
-    window.location.href = `../pages/edit-campaign.html?campaign_id=${$("#edit-link").data().campaign}`
+  if ($(this).data().active == "N") {
+    window.location.href = `../pages/edit-campaign.html?campaign_id=${
+      $(this).data().campaign
+    }`;
   } else {
-    alert("This campaign is currently active.")
+    alert("This campaign is currently active.");
   }
-})
+});
 
 $(document).ready(function () {
   const query = window.location.search;
@@ -48,7 +50,6 @@ $(document).ready(function () {
     `http://localhost:3000/api/societies/campaigns/${societyId}`,
     {}
   ).done(function (json) {
-    console.log(json)
     json.forEach((element) => {
       let campaignDiv = `
         <div class="parent notop">
@@ -61,7 +62,7 @@ $(document).ready(function () {
             </a></button>
           </div>
         </div>
-          <button data-active="${element.active}" data-campaign='${element.campaign_id}' id="edit-link"><a class="button-link" href='..edit-campaign.html?campaign_id=${element.campaign_id}'>
+          <button data-active="${element.active}" data-campaign='${element.campaign_id}' class="edit-link"><a class="button-link" href='..edit-campaign.html?campaign_id=${element.campaign_id}'>
               Edit campaign        
           </a></button>
         `;

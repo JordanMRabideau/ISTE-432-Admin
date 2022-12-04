@@ -16,33 +16,35 @@ function xhr(getPost, url, data) {
 }
 
 function getInputs() {
-  const inputs = $("#questions :input:not(:button)")
-  const qRegex = new RegExp("(question-\\d*)")
-  const cRegex = new RegExp("(choice-\\d*)")
+  const inputs = $("#questions :input:not(:button)");
+  const qRegex = new RegExp("(question-\\d*)");
+  const cRegex = new RegExp("(choice-\\d*)");
 
   // Get all of the input into object form for easier manipulation
   const inputObjects = $.makeArray(inputs).map((input) => {
-    const question = input.id.match(qRegex)
-    const choice = input.id.match(cRegex)
-    const type = $(input).data().type
+    const question = input.id.match(qRegex);
+    const choice = input.id.match(cRegex);
+    const type = $(input).data().type;
     const obj = {
       questionNum: Number(question[0].replace("question-", "")),
       value: input.value,
-      type
-    }
+      type,
+    };
 
     if (choice != null) {
-      obj.choiceNum = Number(choice[0].replace("choice-", ""))
+      obj.choiceNum = Number(choice[0].replace("choice-", ""));
     }
-    
-    return obj
-  })
 
-  let formattedQuestions = []
+    return obj;
+  });
+
+  let formattedQuestions = [];
 
   inputObjects.forEach((obj) => {
     // Attempt to locate the question in the formatted list
-    let existingQuestion = formattedQuestions.find((question) => question.questionNum === obj.questionNum)
+    let existingQuestion = formattedQuestions.find(
+      (question) => question.questionNum === obj.questionNum
+    );
 
     // If the question doesnt already exist, make it
     if (!existingQuestion) {
@@ -50,18 +52,22 @@ function getInputs() {
         questionNum: obj.questionNum,
         title: "",
         limit: -1,
-        choices: []
-      })
+        choices: [],
+      });
 
-      existingQuestion = formattedQuestions.find((question) => question.questionNum === obj.questionNum)
+      existingQuestion = formattedQuestions.find(
+        (question) => question.questionNum === obj.questionNum
+      );
 
       // Set the position value to the position of the new object in the array (1 indexed)
-      existingQuestion.position = newPosition
+      existingQuestion.position = newPosition;
     }
 
     // If the object is a choice, add that choice to the question
-    if (obj.hasOwnProperty('choiceNum')) {
-      let existingChoice = existingQuestion.choices.find((choice) => choice.choiceNum === obj.choiceNum)
+    if (obj.hasOwnProperty("choiceNum")) {
+      let existingChoice = existingQuestion.choices.find(
+        (choice) => choice.choiceNum === obj.choiceNum
+      );
 
       if (!existingChoice) {
         const newChoicePosition = existingQuestion.choices.push({
@@ -69,45 +75,52 @@ function getInputs() {
           name: "",
           image: "",
           info: "",
-        })
+          title: "",
+        });
 
-        existingChoice = existingQuestion.choices.find((choice) => choice.choiceNum === obj.choiceNum)
-        existingChoice.position = newChoicePosition
+        existingChoice = existingQuestion.choices.find(
+          (choice) => choice.choiceNum === obj.choiceNum
+        );
+        existingChoice.position = newChoicePosition;
       }
 
       switch (obj.type) {
-        case 'name':
-          if (obj.value === '') {
-            return "error"
+        case "name":
+          if (obj.value === "") {
+            return "error";
           }
-          existingChoice.name = obj.value
-          break
-        case 'image':
-          existingChoice.image = obj.value
-          break
-        case 'info':
-          existingChoice.info = obj.value
-          break
+          existingChoice.name = obj.value;
+          break;
+        case "image":
+          existingChoice.image = obj.value;
+          break;
+        case "info":
+          existingChoice.info = obj.value;
+          break;
+        case "title":
+          existingChoice.title = obj.value;
+          break;
         default:
-          break
+          break;
       }
     }
 
+    // Else if the object is a question
     else {
       switch (obj.type) {
-        case 'title':
-          if (obj.value === '') {
-            return "error"
+        case "title":
+          if (obj.value === "") {
+            return "error";
           }
-          existingQuestion.title = obj.value
-          break
-        case 'limit':
-          existingQuestion.limit = Number(obj.value)
+          existingQuestion.title = obj.value;
+          break;
+        case "limit":
+          existingQuestion.limit = Number(obj.value);
       }
     }
-  })
+  });
 
-  return formattedQuestions
+  return formattedQuestions;
 }
 
 $(document).ready(function () {
@@ -148,6 +161,9 @@ $(document).ready(function () {
             <label for="question-${qNumber}-choice-1-image">Image: </label>
             <input name="question-${qNumber}-choice-1-image" data-type="image" id="question-${qNumber}-choice-1-image" type="file" />&emsp;&emsp;
 
+            <label for="question-${qNumber}-choice-1-title">Title: </label>
+            <input name="question-${qNumber}-choice-1-title" data-type="title" id="question-${qNumber}-choice-1-title" type="text" />&emsp;&emsp;
+
             <label for="question-${qNumber}-choice-1-info">Choice Info/Bio: </label>
             <textarea name="question-${qNumber}-choice-1-info" data-type="info" id="question-${qNumber}-choice-1-info"></textarea>
           </div>
@@ -175,6 +191,9 @@ $(document).ready(function () {
         <label for="question-${questionId}-choice-${choiceId}-image">Image: </label>
         <input name="question-${questionId}-choice-${choiceId}-image" data-type="image" id="question-${questionId}-choice-${choiceId}-image" type="file" />&emsp;&emsp;
 
+        <label for="question-${questionId}-choice-${choiceId}-title">Title: </label>
+        <input name="question-${questionId}-choice-${choiceId}-title" data-type="title" id="question-${questionId}-choice-${choiceId}-title" type="text" />&emsp;&emsp;
+
         <label for="question-${questionId}-choice-${choiceId}-info">Choice Info/Bio: </label>
         <textarea name="question-${questionId}-choice-${choiceId}-info" data-type="info" id="question-${questionId}-choice-${choiceId}"></textarea>
       </div>
@@ -189,21 +208,21 @@ $(document).ready(function () {
     );
   });
 
-  $("#questions").submit(function(e) {
-    e.preventDefault()
+  $("#questions").submit(function (e) {
+    e.preventDefault();
 
     const data = {
       society_id: Number($("#society-select").val()),
       name: $("#campaign-name").val(),
       start_time: $("#start-time").val(),
       end_time: $("#end-time").val(),
-      questions: getInputs()
+      questions: getInputs(),
     };
 
-    xhr("post", "http://localhost:3000/api/campaign/generate", data).done(function (
-      response
-    ) {
-      console.log(response);
-    });
-  })
+    xhr("post", "http://localhost:3000/api/campaign/generate", data).done(
+      function (response) {
+        window.location.href = "./manager.html";
+      }
+    );
+  });
 });

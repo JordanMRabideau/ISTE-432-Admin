@@ -62,9 +62,7 @@ $(document).ready(function () {
     };
 
     xhr("post", "http://localhost:3000/api/society/generate", data).done(
-      function (response) {
-        console.log(response);
-      }
+      function (response) {}
     );
   });
 });
