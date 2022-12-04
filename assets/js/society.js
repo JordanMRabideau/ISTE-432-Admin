@@ -1,5 +1,7 @@
 "use strict";
 
+// Page displays current society member count and active campaigns with ability to view results or redirect to modification
+
 function xhr(getPost, url, data) {
   return $.ajax({
     type: getPost,
@@ -18,6 +20,7 @@ $(document).ready(function () {
   const params = new URLSearchParams(query);
   const societyId = params.get("society_id");
 
+  // Get society's member count
   xhr("get", `http://localhost:3000/api/societies/${societyId}`, {}).done(
     function (json) {
       const society = json[0];
@@ -30,27 +33,25 @@ $(document).ready(function () {
     }
   );
 
-  xhr(
-    "get",
-    `http://localhost:3000/api/societies/campaigns/${societyId}`,
-    {}
-  ).done(function (json) {
-    json.forEach((element) => {
-      let campaignDiv = `
-        <div class="parent notop">
-          <div class="child">
-            <h3>${element.name}\t| Votes: ${element.vote_count}</h3>
+  // Get society's campaigns with vote count
+  xhr("get", `http://localhost:3000/api/societies/campaigns/${societyId}`, {}).done
+    (function (json) {
+      json.forEach((element) => {
+        let campaignDiv = `
+          <div class="parent notop">
+            <div class="child">
+              <h3>${element.name}\t| Votes: ${element.vote_count}</h3>
+            </div>
+            <div class="child">
+              <button><a href='./campaign.html?campaign_id=${element.campaign_id}'>
+                  View Campaign Results
+              </a></button>
+            </div>
           </div>
-          <div class="child">
-            <button><a href='./campaign.html?campaign_id=${element.campaign_id}'>
-                View Campaign Results
+            <button><a class="button-link" href='./edit-campaign.html?campaign_id=${element.campaign_id}'>
+                Edit campaign        
             </a></button>
-          </div>
-        </div>
-          <button><a class="button-link" href='./edit-campaign.html?campaign_id=${element.campaign_id}'>
-              Edit campaign        
-          </a></button>
-        `;
+          `;
 
       $("#campaigns").append(campaignDiv);
     });

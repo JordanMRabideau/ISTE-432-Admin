@@ -1,5 +1,7 @@
 "use strict";
 
+// Page allows users to view societies and campaigns, toggle whether the campaign is active, and create new societies or campaigns
+
 function xhr(getPost, url, data) {
   return $.ajax({
     type: getPost,
@@ -13,8 +15,8 @@ function xhr(getPost, url, data) {
   });
 }
 
+// Return list of societies
 $(document).ready(function () {
-  // Test the endpoint
   xhr("get", "http://localhost:3000/api/societies", {}).done(function (json) {
     let societyDiv = "<div><h2>Active Societies</h2>";
 
@@ -31,6 +33,7 @@ $(document).ready(function () {
     $("#society-list").append(societyDiv);
   });
 
+  // Return list of campaigns
   xhr("get", "http://localhost:3000/api/campaigns", {}).done(function (json) {
     let campaignDiv = "<div><h2>Campaign List</h2>";
 

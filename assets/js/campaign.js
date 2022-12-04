@@ -1,5 +1,7 @@
 "use strict";
 
+// Page will display current results, allow for importation of paper ballots, and allows the user to select a range of ballots via Ballot_ID to view a subset of results
+
 function xhr(getPost, url, data) {
   return $.ajax({
     type: getPost,
@@ -13,6 +15,7 @@ function xhr(getPost, url, data) {
   });
 }
 
+// Format placement of questions on the page
 function formatQuestions(questions) {
   const sorted = questions.sort((a, b) => {
     if (a.question_placement === b.question_placement) {
@@ -62,13 +65,14 @@ function formatQuestions(questions) {
   return formatted;
 }
 
+// Validation of paper ballots
 function validatePaperBallot(formattedBallot, paper) {
   const ballotInts = paper.map((i) => parseInt(i));
   const ballotId = ballotInts.shift();
   const selections = [];
   let numFields = 0;
 
-  // determine how many fields should be in the csv, throw out any non-compliant rows
+  // Determine how many fields should be in the csv, throw out any non-compliant rows
   formattedBallot.forEach((b) => {
     numFields += b.choices.length;
   });
@@ -136,7 +140,8 @@ $(document).ready(function () {
       $("#date-div").append(dates);
     }
   );
-
+  
+  // Imports paper ballots, reads, validates, and submits them to API
   function loadBallots(evt, questions) {
     if (!browserSupportFileUpload()) {
       alert("The File APIs are not fully supported in this browser!");
@@ -218,17 +223,16 @@ $(document).ready(function () {
     const end = $("#ballot-end").val();
     let route;
 
-    console.log("hi");
     if (end && end < start) {
       return;
     }
-    console.log(campaignId);
     if (end && end >= start) {
       route = `http://localhost:3000/api/campaign/results/${campaignId}/${start}/${end}`;
     } else {
       route = `http://localhost:3000/api/campaign/results/${campaignId}/${start}`;
     }
-
+    
+    // Get results sample
     xhr("get", route, {}).done(function (response) {
       $("#sample-results").empty();
 

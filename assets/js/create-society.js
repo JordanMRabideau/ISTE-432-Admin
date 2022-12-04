@@ -1,5 +1,7 @@
 "use strict";
 
+// Page allows the user to create a new society, specify what forms of authorization users will use to access campaigns, and import users to be added as members for the given society
+
 function xhr(getPost, url, data) {
   return $.ajax({
     type: getPost,

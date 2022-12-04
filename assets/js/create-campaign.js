@@ -1,5 +1,7 @@
 "use strict";
 
+// Page allows the user to create a new campaign for a society, add questions and candidates for each, and when the campaign will be available
+
 function xhr(getPost, url, data) {
   return $.ajax({
     type: getPost,

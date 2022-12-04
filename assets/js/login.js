@@ -1,5 +1,7 @@
 "use strict";
 
+// Page authenticates admin users logging in
+
 function xhr(getPost, url, data) {
   return $.ajax({
     type: getPost,

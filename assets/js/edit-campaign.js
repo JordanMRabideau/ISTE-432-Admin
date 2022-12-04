@@ -1,5 +1,7 @@
 "use strict";
 
+// Page allows the user to modify values of a given campaign, and the availability of the campaign
+
 function xhr(getPost, url, data) {
   return $.ajax({
     type: getPost,
@@ -13,6 +15,7 @@ function xhr(getPost, url, data) {
   });
 }
 
+// Format questions by placement
 function formatQuestions(questions) {
   const sorted = questions.sort((a, b) => {
     if (a.question_placement === b.question_placement) {
