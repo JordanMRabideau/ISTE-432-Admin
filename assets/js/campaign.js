@@ -252,5 +252,9 @@ $(document).ready(function () {
 
       $("#result-modal").modal();
     });
+
+    $("#close-modal").click(function() {
+      $.modal.close();
+    })
   });
 });
